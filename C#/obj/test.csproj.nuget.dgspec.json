@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Rika\\Documents\\GitHub\\C#\\test\\test.csproj": {}
+    "C:\\Users\\Rika\\Documents\\GitHub\\Tests\\C#\\test.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Rika\\Documents\\GitHub\\C#\\test\\test.csproj": {
+    "C:\\Users\\Rika\\Documents\\GitHub\\Tests\\C#\\test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Rika\\Documents\\GitHub\\C#\\test\\test.csproj",
+        "projectUniqueName": "C:\\Users\\Rika\\Documents\\GitHub\\Tests\\C#\\test.csproj",
         "projectName": "test",
-        "projectPath": "C:\\Users\\Rika\\Documents\\GitHub\\C#\\test\\test.csproj",
+        "projectPath": "C:\\Users\\Rika\\Documents\\GitHub\\Tests\\C#\\test.csproj",
         "packagesPath": "C:\\Users\\Rika\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Rika\\Documents\\GitHub\\C#\\test\\obj\\",
+        "outputPath": "C:\\Users\\Rika\\Documents\\GitHub\\Tests\\C#\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Rika\\AppData\\Roaming\\NuGet\\NuGet.Config"
