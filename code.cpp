@@ -116,9 +116,57 @@ int main() {
 // error messages (in practice)
 //.........
 
+//--------------------------------------
 
+// Lambda expression changes
+// before c++20, [=] campture 'this' implicitly
+// since c++200, you need to be implicit, so: [=, this]
 
+// Templated Lambda Expressions
+// use familiar template syntax with lambda expressions
+[] <typename T> (T t) {/*...*/};
+[] <typename T, int N> (T (&t)[N]) {/*...*/};
 
+// Motivation 1 (want to know T of vector<T>)
+// pre c++20
+[] (const auto &vec) {
+    using V = std::decay_t<decltype(vec)>;
+    using T = typename V::value_type;
+    T x {};
+    ...
+};
+// with c++20
+[] <typename T> (const vector<T> &vec) {
+    T x {};
+    ...
+};
 
+// Motivation 2 (perfect forwarding)
+// pre c++20
+[] (auto&& ...args) { return foo(std::forward<decltype(args)>(args)...); };
+// with c++20
+[] <typename ...T> (T&& ...args) { foo(std::forward<T>(args)...); };
 
+// Pack Expansion in Lambda Captures
+// Pre c++20
+// A simple-capture followed be an ellipsis is a pack expansion => ok
+template<class F, class... Args>
+auto delay_invoke(F f, Args ...args) {
+  return [f, args...] { return std::invoke(f, args...); }
+}
+// An init-capture followed by an ellipsis is ill-formed (well-formed in c++20)
+template<class F, class... Args>
+auto delay_invoke(F f, Args ...args) {
+  return [f = std::move(f), args = std::move(args)...]() -> decltype(auto) { 
+    return std::invoke(f, args...); 
+   }
+}
+// use the alternative in pre c++20
+template<class F, class... Args>
+auto delay_invoke(F f, Args ...args) {
+  return [f=std::move(f), tup=std::make_tuple(std::move(args)...)]() -> decltype(auto) {
+    return std::apply(f, tup);
+  };
+}
 
+//--------------------------------------
