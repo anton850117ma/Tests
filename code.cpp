@@ -152,7 +152,7 @@ int main() {
 // A simple-capture followed be an ellipsis is a pack expansion => ok
 template<class F, class... Args>
 auto delay_invoke(F f, Args ...args) {
-  return [f, args...] { return std::invoke(f, args...); }
+  return [f, args...]() -> decltype(auto) { return std::invoke(f, args...); }
 }
 // An init-capture followed by an ellipsis is ill-formed (well-formed in c++20)
 template<class F, class... Args>
