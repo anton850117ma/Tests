@@ -113,8 +113,8 @@ int main() {
   Foo(b);
 }
 
-// error messages (in practice)
-//.........
+// TODO: error messages (in practice)
+
 
 //--------------------------------------
 
@@ -178,10 +178,56 @@ auto delay_invoke(F f, Args ...args) {
 // constexpr function can now:
 // (1) use dynamic_cast and typeid
 // (2) do dynamic memory allocations, global new/delete
-// (3) contain try/catch blocks
+// (3) must be transient constexpr allocations
+// (4) contain try/catch blocks
 //     * but still cannot throw exceptions
 // std::string and std::vector are now constexpr
 // TODO: give examples in practice
+
+// Immediate function - consteval
+// constexpr function
+//  might be called at compile time, but not a hard requirement
+
+constexpr auto InchToMm(double inch) { return inch * 25.4; }
+
+const double const_inch { 6 };
+const auto mm1 { InchToMm(const_inch) };   // at compile time
+
+double dynamic_inch { 8 };
+const auto mm2 { InchToMm(dynamic_inch) };  // at run time
+
+// Consteval function
+//  required to always produce a constant at compile time, a non-constant result should be a compilation error
+//  implies inline as constexpr
+//  called: immediate functions
+
+consteval auto InchToMm(double inch) { return inch * 25.4; }
+
+const double const_inch { 6 };
+const auto mm1 { InchToMm(const_inch) };   // Fine, everything is constant
+
+double dynamic_inch { 8 };
+const auto mm2 { InchToMm(dynamic_inch) }; // Compilation error: not constant
+
+// Constinit
+// asserts that a variable has static initialization, i.e. zero initialization and constant initialization, 
+//  otherwise the program is ill-formed
+// declares variable with static or thread storage duration, e.g. static and thread_local
+// cannot be used with constexpr and consteval
+// when the declared variable is a reference, constinit is equivalent to constexpr
+// can be used with object whcih has constexpr constructors and no constexpr destructor
+// prevent the static initialization order fiasco
+
+constinit const char *a = { /*...*/ };
+
+// TODO: example of static initialization order fiasco
+
+//--------------------------------------
+
+
+
+
+
 
 
 
