@@ -181,6 +181,7 @@ auto delay_invoke(F f, Args ...args) {
 // (3) must be transient constexpr allocations
 // (4) contain try/catch blocks
 //     * but still cannot throw exceptions
+// in constexpr function, std::bit_cast can be used as reinterpret_cast to some extent
 // std::string and std::vector are now constexpr
 // TODO: give examples in practice
 
@@ -224,11 +225,13 @@ constinit const char *a = { /*...*/ };
 
 //--------------------------------------
 
-
-
-
-
-
+// Three-way comparison operator (spaceship operator)
+// three-way: comparing 2 objects and then comparing result with 0
+//  (a <=> b) < 0  // true if a < b
+//  (a <=> b) > 0  // true if a > b
+//  (a <=> b) == 0 // true if a is equal/equivalent to b
+// Similar to C-style strcmp() returning neg. value, 0, or pos. value
+// maybe give up this topic
 
 
 
