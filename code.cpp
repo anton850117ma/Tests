@@ -27,7 +27,7 @@ template<typename T> concept C = requires
     typename Ref<T>;   // required alias template substitution
 };
 
-// using the above concept (TODO)
+// TODO: using the above concept in practice
 
 
 // Compound: { expression } noexcept return-type-requirement;
@@ -81,7 +81,7 @@ void Foo(C auto t);
 
 template<typename T>
 struct Incrementable_impl {
-  template <typename U>
+  template<typename U>
   static auto test(U &&u) -> decltype(++u, u++, std::true_type {});
   static auto test(...) -> std::false_type;
   using type = decltype(test(std::declval<T>()));
@@ -89,14 +89,14 @@ struct Incrementable_impl {
 template<typename T>
 struct Incrementable: Incrementable_impl<T>::type {};
 
-// VS concept
-
+// using this check
 template<typename T>
 void do_increment_twice(T &&t) {
   if constexpr (Incrementable<T>::value) { ++t; t++; }
 }
 
-// Compared to
+// VS concept
+
 template<typename T>
 concept Incrementable = requires(T x) { ++x; x++; };
 
@@ -170,3 +170,19 @@ auto delay_invoke(F f, Args ...args) {
 }
 
 //--------------------------------------
+
+// constexpr & consteval & constinit
+
+// constexpr changes
+// constexpr virtual functions
+// constexpr function can now:
+// (1) use dynamic_cast and typeid
+// (2) do dynamic memory allocations, global new/delete
+// (3) contain try/catch blocks
+//     * but still cannot throw exceptions
+// std::string and std::vector are now constexpr
+// TODO: give examples in practice
+
+
+
+
