@@ -154,10 +154,10 @@ concept Incrementable_cpp20 = requires(T x) { ++x; x++; };
 void Boo(Incrementable_cpp20 auto t) { t++; }
 class Bar {};
 
-// int main() {
-//     Bar b;
-//     // Boo(b);
-// }
+int main() {
+    Bar b;
+    Boo(b);
+}
 
 /* ====================================================================== */
 
@@ -377,3 +377,11 @@ auto                 init_staticB = init_staticA;
 int main() { std::cout << "staticB: " << init_staticB << std::endl; }
 
 // Force constant initialization
+
+/* ====================================================================== */
+
+// TODO         nodiscard & likely & unlikely
+
+/* ====================================================================== */
+
+// TODO         Branchless Optimization
