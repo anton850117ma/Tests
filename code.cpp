@@ -20,27 +20,21 @@
 
 // * Simple: check whether expressions that will compile
 template<typename T>
-concept Incrementable = requires(T t) {
-    ++t;
-    t++;
-};
+concept Incrementable = requires(T t) { ++t; t++;};
 
 template<typename T>
-concept Decrementable = requires(T t) {
-    --t;
-    t--;
-};
+concept Decrementable = requires(T t) { --t; t--;};
 
 /* ====================================================================== */
 
 // * Using the concept
 
 // (1)
-template<Incrementable T>
+template<Incrementable T> 
 void Foo(T t);
 
 // (2)
-template<typename T>
+template<typename T> 
 requires Incrementable<T>
 void Foo(T t);
 
@@ -55,12 +49,9 @@ void Foo(Incrementable auto t);
 
 // * Type: check named types with keyword 'typename'
 
-template<typename T>
-using Ref = T &;
-template<typename T>
-class S {};
-template<typename T>
-concept Concept1 = requires {
+template<typename T> using Ref = T&;
+template<typename T> class S {};
+template<typename T> concept Concept1 = requires {
     typename T::inner;    // required nested member name
     typename S<T>;        // required class template specialization
     typename Ref<T>;      // required alias template substitution
@@ -75,8 +66,7 @@ concept Concept1 = requires {
 template<typename T>
 concept Concept2 = requires(T &x, T &y) {
     // requires a non-throwing swap() method
-    { x.swap(y) }
-    noexcept;
+    { x.swap(y) } noexcept;
 
     // requires a size() method returning a size_t
     { x.size() } -> std::convertible_to<std::size_t>;
@@ -87,6 +77,7 @@ concept Concept2 = requires(T &x, T &y) {
 // Example: from cpluscplus
 template<typename T>
 concept Concept3 = requires(T x) {
+
     // the expression *x must be valid
     // AND the type T::inner must be valid
     // AND the result of *x must be convertible to T::inner
@@ -108,7 +99,7 @@ concept Concept3 = requires(T x) {
 
 template<class T>
 concept Concept4 = requires(T a, size_t n) {
-    requires std::same_as<T *, decltype(&a)>;
+    requires std::same_as<T *, decltype(&a)>; 
     requires std::same_as<T *, decltype(new T)>;
     requires std::same_as<T *, decltype(new T[n])>;
 };
@@ -118,7 +109,7 @@ concept Concept4 = requires(T a, size_t n) {
 // * Combining multiple concepts:
 
 // (1)
-template<typename T>
+template<typename T> 
 requires Incrementable<T> && Decrementable<T>
 void Foo(T t);
 
@@ -147,11 +138,8 @@ struct Incrementable_cpp17: Incrementable_impl<T>::type {};
 // (3) check the member 'value' of std::true_type or std::false_type
 template<typename T>
 void do_increment_twice(T &&t) {
-    // requires c++17
-    if constexpr (Incrementable_cpp17<T>::value) {
-        ++t;
-        t++;
-    }
+    // requires c++17 
+    if constexpr (Incrementable_cpp17<T>::value) { ++t; t++; }
 }
 
 /* ====================================================================== */
@@ -161,10 +149,7 @@ void do_increment_twice(T &&t) {
 //   2. easier to read template error messages
 
 template<typename T>
-concept Incrementable_cpp20 = requires(T x) {
-    ++x;
-    x++;
-};
+concept Incrementable_cpp20 = requires(T x) { ++x; x++; };
 
 void Boo(Incrementable_cpp20 auto t) { t++; }
 class Bar {};
@@ -185,8 +170,8 @@ class Bar {};
 // * Templated Lambda Expressions
 //   use familiar template syntax with lambda expressions
 
-auto lambda1 = []<typename T>(T t) { /*...*/ };
-auto lambda2 = []<typename T, int N>(T (&t)[N]) { /*...*/ };
+auto lambda1 = [] <typename T> (T t) { /*...*/ };
+auto lambda2 = [] <typename T, int N> (T (&t)[N]) { /*...*/ };
 
 /* ====================================================================== */
 
@@ -216,7 +201,7 @@ auto lambda5 = [](auto &&...args) {
 };
 
 // since c++20
-auto lambda6 = []<typename... T>(T && ...args) {
+auto lambda6 = []<typename... T>(T &&...args) {
     foo(std::forward<T>(args)...);
 };
 
@@ -232,8 +217,7 @@ auto delay_invoke(F f, Args... args) {
         [f, args...]() -> decltype(auto) { return std::invoke(f, args...); }
 }
 
-//  an init-capture followed by an ellipsis is ill-formed (well-formed since
-//  C++20)
+//  an init-capture followed by an ellipsis is ill-formed (well-formed since C++20)
 template<class F, class... Args>
 auto delay_invoke(F f, Args... args) {
     return
@@ -263,15 +247,14 @@ auto delay_invoke(F f, Args... args) {
 //      (3) must be transient constexpr allocations
 //      (4) contain try/catch blocks
 // !          but still cannot throw exceptions
-//   3. in constexpr function, std::bit_cast can be used as reinterpret_cast
-//   to some extent
+//   3. in constexpr function, std::bit_cast can be used as reinterpret_cast to some extent
 //   4. std::string and std::vector are now constexpr
 
 /* ====================================================================== */
 
 // (1)
 constexpr int maxElement() {
-    std::vector myVec = {1, 2, 4, 3};
+    std::vector myVec = {1, 2, 4, 3}; 
     std::sort(myVec.begin(), myVec.end());
     return myVec.back();
 }
@@ -285,7 +268,7 @@ constexpr auto correctRelease() {
 
 // (3)
 constexpr auto forgottenRelease() {
-    auto *p = new int[2020];
+    auto *p = new int[2020]; 
     try {
         /* ... */
         return 2022;
@@ -303,8 +286,7 @@ int main() {
 /* ====================================================================== */
 
 // * Immediate function - consteval
-//   constexpr function - might be called at compile time, but not a hard
-//   requirement
+//   constexpr function - might be called at compile time, but not a hard requirement
 
 constexpr auto InchToMm(double inch) { return inch * 25.4; }
 
@@ -318,7 +300,7 @@ const auto mm2 {InchToMm(dynamic_inch)};    // at run time
 
 // * Consteval function
 //  1. required to always produce a constant at compile time
-//  2. implies inline as constexpr
+//  2. implies inline as constexpr 
 
 consteval auto InchToMm2(double inch) { return inch * 25.4; }
 
@@ -326,22 +308,17 @@ const double const_inch {6};
 const auto   mm1 {InchToMm2(const_inch)};    // Fine, everything is constant
 
 double     dynamic_inch {8};
-const auto mm2 {
-    InchToMm2(dynamic_inch)};    // Compilation error: not constant
+const auto mm2 {InchToMm2(dynamic_inch)};    // Compilation error: not constant
 
 /* ====================================================================== */
 
 // * Constinit
-//   1. asserts that a variable has static initialization, i.e. zero
-//   initialization and
+//   1. asserts that a variable has static initialization, i.e. zero initialization and 
 //      constant initialization, otherwise the program is ill-formed
-//   2. declares variable with static or thread storage duration, e.g. static
-//   and thread_local
-//   3. cannot be used with constexpr and consteval
-//   4. when the declared variable is a reference, constinit is equivalent to
-//   constexpr
-//   5. can be used with object which has constexpr constructors and no
-//   constexpr destructor
+//   2. declares variable with static or thread storage duration, e.g. static and thread_local 
+//   3. cannot be used with constexpr and consteval 
+//   4. when the declared variable is a reference, constinit is equivalent to constexpr 
+//   5. can be used with object which has constexpr constructors and no constexpr destructor
 // ! 6. prevent the static initialization order fiasco
 
 constinit const char *a = {/*...*/};
@@ -351,19 +328,18 @@ constinit const char *a = {/*...*/};
 // * Before c++20
 
 // source.cpp
-int  quad(int n) { return n * n; }
+int quad(int n) { return n * n;}
 auto staticA = quad(5);
 
 // main.cpp
 extern int staticA;
 auto       staticB = staticA;
-int        main() { std::cout << "staticB: " << staticB << std::endl; }
+int        main() { std::cout << "staticB: " << staticB << std::endl;}
 
 // staticA and staticB belong to different translation units.
 // The initialization of staticB depends on the initialization of staticA.
-// The issue is that there is no guarantee in which order staticA or staticB
-// are initialized at run time. You have a 50 : 50 chance that staticB is 0
-// (main -> source) or 25 (source -> main).
+// The issue is that there is no guarantee in which order staticA or staticB are initialized at run time.
+// You have a 50 : 50 chance that staticB is 0 (main -> source) or 25 (source -> main).
 
 /* ====================================================================== */
 
@@ -383,7 +359,9 @@ int &static_value() {
 int &static_value();
 auto staticB = static_value();
 
-int main() { std::cout << "staticB: " << staticB << std::endl; }
+int main() {
+    std::cout << "staticB: " << staticB << std::endl;
+}
 
 /* ====================================================================== */
 
