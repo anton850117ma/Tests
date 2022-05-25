@@ -181,13 +181,13 @@ auto lambda2 = [] <typename T, int N> (T (&t)[N]) { /*...*/ };
 auto lambda3 = [](const auto &vec) {
     using V = std::decay_t<decltype(vec)>;
     using T = typename V::value_type;
-    T x {};
+    T x;
     /*...*/
 };
 
 // since c++20
 auto lambda4 = []<typename T>(const std::vector<T> &vec) {
-    T x {};
+    T x;
     /*...*/
 };
 
