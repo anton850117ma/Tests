@@ -254,7 +254,7 @@ auto delay_invoke(F f, Args... args) {
 
 // (1)
 constexpr int maxElement() {
-    std::vector myVec = {1, 2, 4, 3}; 
+    std::vector<int> myVec = {1, 2, 4, 3}; 
     std::sort(myVec.begin(), myVec.end());
     return myVec.back();
 }
@@ -381,6 +381,15 @@ int main() { std::cout << "staticB: " << init_staticB << std::endl; }
 /* ====================================================================== */
 
 // TODO         nodiscard & likely & unlikely
+
+// * [[nodiscard]]
+//   It can now include a reason.
+
+struct [[nodiscard("error info")]] error_info {};
+[[nodiscard("nodiscard reason")]] void *getData() {};
+
+/* ====================================================================== */
+
 
 /* ====================================================================== */
 
